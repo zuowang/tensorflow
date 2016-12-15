@@ -358,6 +358,21 @@ Status BatchMatMulGrad(const Scope& scope, const Operation& op,
 }
 REGISTER_GRADIENT_OP("BatchMatMul", BatchMatMulGrad);
 
+//Status SeluGrad(const Scope& scope, const Operation& op,
+//               const std::vector<Output>& grad_inputs,
+//               std::vector<Output>* grad_outputs) {
+//  // y = x / (1 + exp(-x))
+//  // dy/dx = y + y * (1 - y) / x
+//  // dx = dy * (y + y * (1 - y) / x)
+//  auto one = Cast(scope, Const(scope, 1.0), grad_outputs[0].type());
+//  auto ty = Mul(scope, grad_outputs[0], Sub(scope, one, grad_outputs[0]));
+//  auto dxdy = Add(scope, grad_outputs[0], Div(scope, ty, op.input(0)));
+//  auto dx = Mul(scope, grad_inputs[0], dxdy);
+//  grad_outputs->push_back(dx);
+//  return scope.status();
+//}
+//REGISTER_GRADIENT_OP("Selu", SinGrad);
+
 }  // anonymous namespace
 }  // namespace ops
 }  // namespace tensorflow

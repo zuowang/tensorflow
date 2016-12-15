@@ -29,6 +29,7 @@ shape as the input tensor.
 @@relu6
 @@crelu
 @@elu
+@@selu
 @@softplus
 @@softsign
 @@dropout

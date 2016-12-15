@@ -26,6 +26,7 @@ relu = core.define_unary_op('relu', nn.relu)
 relu6 = core.define_unary_op('relu6', nn.relu6)
 crelu = core.define_unary_op('crelu', nn.crelu)
 elu = core.define_unary_op('elu', nn.elu)
+selu = core.define_unary_op('elu', nn.selu)
 softplus = core.define_unary_op('softplus', nn.softplus)
 
 l2_loss = core.define_unary_op('l2_loss', nn.l2_loss)

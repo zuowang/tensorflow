@@ -1588,6 +1588,34 @@ backprops: The gradients: `gradients * (outputs + 1)` if outputs < 0,
 `gradients` otherwise.
 )doc");
 
+REGISTER_OP("Selu")
+.Input("features: T")
+.Output("activations: T")
+.Attr("T: realnumbertype")
+.SetShapeFn(shape_inference::UnchangedShape)
+.Doc(R"doc(
+Computes exponential linear: `exp(features) - 1` if < 0,
+`features / (1 + exp(-features))` otherwise.
+
+)doc");
+
+REGISTER_OP("SeluGrad")
+.Input("gradients: T")
+.Input("inputs: T")
+.Input("outputs: T")
+.Output("backprops: T")
+.Attr("T: realnumbertype")
+.SetShapeFn(shape_inference::MergeBothInputsShapeFn)
+.Doc(R"doc(
+Computes gradients for the exponential linear (Elu) operation.
+
+gradients: The backpropagated gradients to the corresponding Elu operation.
+inputs: The inputs of the corresponding Elu operation.
+outputs: The outputs of the corresponding Elu operation.
+backprops: The gradients: `gradients * (outputs + 1)` if outputs < 0,
+`outputs + outputs * (1 - outputs) / inputs` otherwise.
+)doc");
+
 REGISTER_OP("Softplus")
     .Input("features: T")
     .Output("activations: T")

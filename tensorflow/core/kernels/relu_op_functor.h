@@ -125,6 +125,43 @@ struct EluGrad {
   }
 };
 
+// Functor used by SeluOp to do the computations.
+template <typename Device, typename T>
+struct Selu {
+  // Computes Selu activation.
+  //
+  // features: any shape.
+  // activations: same shape as "features".
+  void operator()(const Device& d, typename TTypes<T>::ConstTensor features,
+                  typename TTypes<T>::Tensor activations) {
+    // features.constant(?)
+    activations.device(d) =
+        (features < static_cast<T>(0))
+            .select(features.exp() - features.constant(static_cast<T>(1)),
+                    features / ((-features).exp() + features.constant(static_cast<T>(1))) );
+  }
+};
+
+// Functor used by SeluGradOp to do the computations.
+template <typename Device, typename T>
+struct SeluGrad {
+  // Computes SeluGrad backprops.
+  //
+  // gradients: gradients backpropagated to the Selu op.
+  // features: inputs that were passed to the Selu op.
+  // activations: outputs of the Selu op.
+  // backprops: gradients to backpropagate to the Selu inputs.
+  void operator()(const Device& d, typename TTypes<T>::ConstTensor gradients,
+                  typename TTypes<T>::ConstTensor features,
+                  typename TTypes<T>::ConstTensor activations,
+                  typename TTypes<T>::Tensor backprops) {
+    backprops.device(d) =
+        (activations < static_cast<T>(0))
+            .select((activations + static_cast<T>(1)) * gradients,
+                    (activations + activations * (1 - activations) / features) * gradients);
+  }
+};
+
 }  // namespace functor
 }  // namespace tensorflow
 

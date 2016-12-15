@@ -38,6 +38,7 @@ class NNTests(test_util.Base):
         ('relu6', tf.nn.relu6, nn.relu6),
         ('crelu', tf.nn.crelu, nn.crelu),
         ('elu', tf.nn.elu, nn.elu),
+        ('selu', tf.nn.selu, nn.selu),
         ('softplus', tf.nn.softplus, nn.softplus),
         ('l2_loss', tf.nn.l2_loss, nn.l2_loss),
         ('softmax', tf.nn.softmax, nn.softmax),

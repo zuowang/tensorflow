@@ -59,6 +59,18 @@ TF_CALL_REAL_NUMBER_TYPES(REGISTER_RELU_KERNELS);
 TF_CALL_GPU_NUMBER_TYPES(REGISTER_ELU_KERNELS);
 #undef REGISTER_ELU_KERNELS
 
+#define REGISTER_SELU_KERNELS(type)                                  \
+  REGISTER_KERNEL_BUILDER(                                          \
+      Name("Selu").Device(DEVICE_CPU).TypeConstraint<type>("T"),     \
+      SeluOp<CPUDevice, type>);                                      \
+  REGISTER_KERNEL_BUILDER(                                          \
+      Name("SeluGrad").Device(DEVICE_CPU).TypeConstraint<type>("T"), \
+      SeluGradOp<CPUDevice, type>)
+
+// Selu only makes sense with float or double.
+TF_CALL_GPU_NUMBER_TYPES(REGISTER_SELU_KERNELS);
+#undef REGISTER_SELU_KERNELS
+
 #if GOOGLE_CUDA
 // Forward declarations of the functor specializations for GPU.
 namespace functor {
@@ -124,7 +136,13 @@ TF_CALL_GPU_NUMBER_TYPES(DECLARE_GPU_SPEC);
       EluOp<GPUDevice, type>);                                        \
   REGISTER_KERNEL_BUILDER(                                            \
       Name("EluGrad").Device(DEVICE_GPU).TypeConstraint<type>("T"),   \
-      EluGradOp<GPUDevice, type>)
+      EluGradOp<GPUDevice, type>)                                     \
+  REGISTER_KERNEL_BUILDER(                                            \
+      Name("Selu").Device(DEVICE_GPU).TypeConstraint<type>("T"),       \
+      SeluOp<GPUDevice, type>);                                        \
+  REGISTER_KERNEL_BUILDER(                                            \
+      Name("SeluGrad").Device(DEVICE_GPU).TypeConstraint<type>("T"),   \
+      SeluGradOp<GPUDevice, type>)
 
 TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU_KERNELS);
 #undef REGISTER_GPU_KERNELS

@@ -222,6 +222,7 @@ MaxPoolGradWithArgmax
 ReluGrad
 Relu6Grad
 EluGrad
+SeluGrad
 SoftplusGrad
 SoftsignGrad
 TopK
